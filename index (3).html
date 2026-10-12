@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>William Toner</title>
+<meta name="description" content="William Toner, machine learning researcher at Sakana AI in Tokyo. Papers on time series forecasting, efficient LLM inference and noisy labels, plus side projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#15172B; --ink-2:#1D2038; --ink-3:#2A2E4D;
+  --paper:#ECEAF4; --slate:#8C8FB0; --faint:#3A3E62;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--ink);color:var(--paper);-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--serif);font-size:1.15rem;line-height:1.6;background:var(--ink)}
+a{color:var(--paper);text-decoration-color:var(--slate);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{text-decoration-color:var(--paper)}
+:focus-visible{outline:2px solid #00B8F0;outline-offset:3px;border-radius:2px}
+.wrap{max-width:46rem;margin:0 auto;padding-inline:1.25rem}
+
+header{padding-block:5rem 1rem}
+h1{font-weight:300;font-size:clamp(2.6rem,7vw,4.4rem);line-height:1.02;letter-spacing:-.02em;margin:0 0 1.25rem}
+.intro{font-size:1.3rem;line-height:1.5;max-width:36rem;margin:0}
+.intro a{text-decoration-color:var(--faint)}
+.links{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin:1.5rem 0 0;padding:0;list-style:none;font-size:1.05rem}
+.links a{color:var(--slate);text-decoration:none;border-bottom:1px solid var(--faint);padding-bottom:1px}
+.links a:hover{color:var(--paper);border-bottom-color:var(--paper)}
+
+section{padding-block:3.75rem 0}
+h2{font-weight:400;font-size:1.15rem;color:var(--slate);margin:0 0 .5rem}
+
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink-3)}
+.list > li{border-bottom:1px solid var(--ink-3)}
+.row{display:grid;grid-template-columns:6.5rem 1fr;gap:.35rem 1.5rem;padding:1.3rem 0}
+.when{font-family:var(--mono);font-size:.85rem;color:var(--slate);padding-top:.38rem}
+.title{font-size:1.4rem;line-height:1.28;font-weight:400;margin:0}
+.title a{text-decoration:none}
+.title a:hover{text-decoration:underline;text-decoration-color:var(--slate)}
+.meta,.what{grid-column:2;color:var(--slate);font-size:1.05rem;line-height:1.5;margin:0}
+.meta b{color:var(--paper);font-weight:500}
+.meta i{font-style:italic}
+.more{grid-column:2;margin:.2rem 0 0;font-size:1rem}
+.more a{color:var(--slate)}
+.more a:hover{color:var(--paper)}
+
+/* the one bit of colour: the record */
+.feature .title a{text-decoration:none}
+.feature .mark{grid-column:2;display:block;height:3px;width:3.2rem;margin-top:.6rem;border-radius:2px;
+  background:linear-gradient(90deg,#6A4CFF,#00B8F0,#3DE6A0,#FFD84D,#FF6A3D);transition:width .25s ease}
+.feature:hover .mark{width:7rem}
+
+.after{font-size:1rem;color:var(--slate);margin:1rem 0 0}
+
+.cv{list-style:none;margin:0;padding:0}
+.cv li{display:grid;grid-template-columns:6.5rem 1fr;gap:1.5rem;padding:.55rem 0}
+.cv .what{grid-column:auto;color:var(--paper);font-size:1.1rem}
+.cv .what span{color:var(--slate)}
+
+@media (max-width:560px){
+  .row,.cv li{grid-template-columns:1fr;gap:.25rem}
+  .meta,.what,.more,.feature .mark{grid-column:1}
+  .when{padding-top:0}
+}
+@media (prefers-reduced-motion:reduce){.feature .mark{transition:none}}
+footer{padding-block:4.5rem 3rem;color:var(--slate);font-size:1rem}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <h1>William Toner</h1>
+  <p class="intro">I'm a machine learning researcher at <a href="https://sakana.ai">Sakana AI</a> in Tokyo. Before that I spent two years at Huawei working on efficient LLM inference, after a PhD at the University of Edinburgh. I've written about time series forecasting, faster language models and learning from noisy labels. In my spare time I like computational puzzles.</p>
+  <ul class="links" aria-label="Elsewhere">
+    <li><a href="https://scholar.google.com/citations?user=IT6-kcAAAAAJ&amp;hl=en">Google Scholar</a></li>
+    <li><a href="https://github.com/williamtoner">GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/william-toner-ml">LinkedIn</a></li>
+    <li><a href="https://github.com/WToner">Personal GitHub</a></li>
+    <!-- EDIT ME: add more, e.g. <li><a href="mailto:you@example.com">Email</a></li> -->
+  </ul>
+</header>
+
+<main class="wrap">
+
+  <section aria-labelledby="research">
+    <h2 id="research">Research</h2>
+    <ul class="list">
+      <!-- TO ADD A PAPER: copy a <li> ... </li> block, paste it at the top, and edit it. -->
+      <!-- ICLR submission: once it's on arXiv, add it here.
+      <li class="row">
+        <span class="when">2026</span>
+        <p class="title"><a href="https://arxiv.org/abs/XXXX.XXXXX">TITLE</a></p>
+        <p class="meta"><b>William Toner</b>, ... <i>Under review.</i></p>
+      </li>
+      -->
+      <li class="row">
+        <span class="when">2026</span>
+        <p class="title"><a href="https://arxiv.org/abs/2607.01831">Lynx: Progressive Speculative Quantization for Accelerating KV Transfer in Long-Context Inference</a></p>
+        <p class="meta">W. Han, G. M. Yeung, M. Barletta, <b>William Toner</b>, A. Hoste, A. Barker. <i>arXiv preprint.</i></p>
+      </li>
+      <li class="row">
+        <span class="when">2025</span>
+        <p class="title"><a href="https://proceedings.mlr.press/v267/lee25ag.html">Lightweight Online Adaption for Time Series Foundation Model Forecasts</a></p>
+        <p class="meta"><b>William Toner</b>, T. L. Lee, R. Singh, A. Joosen, M. Asenov. <i>ICML 2025.</i></p>
+        <p class="more"><a href="https://arxiv.org/abs/2502.12920">arXiv version</a></p>
+      </li>
+      <li class="row">
+        <span class="when">2025</span>
+        <p class="title"><a href="https://icml.cc/virtual/2025/47843">Higher Acceptance Rates for Speculative Decoding with Randomised Drafting</a></p>
+        <p class="meta"><b>William Toner</b>, M. Asenov, R. Singh, A. Joosen. <i>ICML 2025 workshop: Tiny Titans.</i></p>
+      </li>
+      <li class="row">
+        <span class="when">2025</span>
+        <p class="title"><a href="https://proceedings.mlr.press/v296/toner25a.html">Performance of Zero-Shot Time Series Foundation Models on Cloud Data</a></p>
+        <p class="meta"><b>William Toner</b>, T. L. Lee, A. Joosen, R. Singh, M. Asenov. <i>ICLR 2025 workshop: I Can't Believe It's Not Better (PMLR).</i></p>
+        <p class="more"><a href="https://arxiv.org/abs/2502.12944">arXiv version</a></p>
+      </li>
+            <li class="row">
+        <span class="when">2025</span>
+        <p class="title">Robust Loss Functions for Machine Learning in the Presence of Noisy Labels</p>
+        <p class="meta"><b>William Toner</b>. <i>PhD thesis, University of Edinburgh.</i></p>
+      </li>
+      <li class="row">
+        <span class="when">2024</span>
+        <p class="title"><a href="https://proceedings.mlr.press/v235/toner24a.html">An Analysis of Linear Time Series Forecasting Models</a></p>
+        <p class="meta"><b>William Toner</b>, L. Darlow. <i>ICML 2024.</i></p>
+        <p class="more"><a href="https://arxiv.org/abs/2403.14587">arXiv version</a></p>
+      </li>
+      <li class="row">
+        <span class="when">2024</span>
+        <p class="title"><a href="https://arxiv.org/abs/2409.06830">Noisy Early Stopping for Noisy Labels</a></p>
+        <p class="meta"><b>William Toner</b>, A. Storkey. <i>arXiv preprint.</i></p>
+      </li>
+      <li class="row">
+        <span class="when">2023</span>
+        <p class="title"><a href="https://arxiv.org/abs/2307.13100">Label Noise: Correcting the Forward-Correction</a></p>
+        <p class="meta"><b>William Toner</b>, A. Storkey. <i>arXiv preprint.</i> An earlier version appeared at the ICML 2023 AdvML-Frontiers workshop.</p>
+        <p class="more"><a href="https://openreview.net/forum?id=FenYb7HXSy">Workshop version on OpenReview</a></p>
+      </li>
+    </ul>
+    <p class="after">The full list, with citations, is on <a href="https://scholar.google.com/citations?user=IT6-kcAAAAAJ&amp;hl=en">Google Scholar</a>.</p>
+  </section>
+
+  <section aria-labelledby="projects">
+    <h2 id="projects">Side projects</h2>
+    <ul class="list">
+      <!-- TO ADD A PROJECT: copy a <li> ... </li> block, paste it at the top, and edit it. -->
+      <li class="row feature">
+        <span class="when">Oct 2026</span>
+        <p class="title"><a href="/SnakeBox/">A record snake in the 13-dimensional cube</a></p>
+        <p class="what">A snake-in-the-box of 2946 edges in thirteen dimensions, improving on the previous best of 2938. Watch it draw itself, or verify it in your browser.</p>
+        <span class="mark" aria-hidden="true"></span>
+      </li>
+      <li class="row">
+        <span class="when">Sep 2026</span>
+        <p class="title"><a href="/Kanjr/app/#/">Kanjr, a kanji learning app</a></p>
+        <p class="what">A spaced-repetition web app for learning the meanings of all 2,136 jōyō kanji, each taught after the parts it's built from, with mnemonics. I use it on my iPhone.</p>
+        <p class="more"><a href="https://github.com/williamtoner/Kanjr">Source on GitHub</a></p>
+      </li>
+      <li class="row">
+        <span class="when">Apr 2026</span>
+        <p class="title"><a href="https://oeis.org/A029495">A new term of OEIS A029495</a></p>
+        <p class="what">Numbers <i>k</i> that divide the reversed binary concatenation of 1 to <i>k</i>. The first three terms, 1, 5 and 337, had stood alone; a parallel GPU search found the fourth, 58088321, and showed there are no others below 10<sup>8</sup>.</p>
+      </li>
+      <li class="row">
+        <span class="when">Earlier</span>
+        <p class="title"><a href="https://github.com/WToner/Wordle">A Wordle solver</a></p>
+        <p class="what">Designing an AI that solves Wordle in as few guesses as possible.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="background">
+    <h2 id="background">Background</h2>
+    <ul class="cv">
+      <li><span class="when">Now</span><span class="what">Machine learning researcher, Sakana AI, Tokyo</span></li>
+      <li><span class="when">2024–26</span><span class="what">Researcher, Huawei <span>efficient LLM inference</span></span></li>
+      <li><span class="when">PhD</span><span class="what">University of Edinburgh <span>robust learning with noisy labels</span></span></li>
+      <li><span class="when">2022</span><span class="what">BlackRock AI Labs <span>time series modelling</span></span></li>
+      <li><span class="when">MMath</span><span class="what">Mathematics, University of Warwick <span>with a year at LMU Munich</span></span></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  William Toner, 2026. This site lives on <a href="https://github.com/williamtoner/williamtoner.github.io">GitHub</a>.
+</footer>
+</body>
+</html>
