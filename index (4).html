@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SnakeBox: a 2946-edge snake in Q13</title>
+<meta name="description" content="A record-length snake-in-the-box in the 13-dimensional hypercube: an induced path of 2946 edges, by William Toner.">
+<meta property="og:title" content="SnakeBox: a 2946-edge snake in Q13">
+<meta property="og:description" content="A record-length induced path in the 13-dimensional hypercube.">
+<meta property="og:image" content="assets/snake_q13_2946.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#15172B; --ink-2:#1D2038; --ink-3:#2A2E4D;
+  --paper:#ECEAF4; --slate:#8C8FB0; --faint:#3A3E62;
+  --s0:#6A4CFF; --s1:#00B8F0; --s2:#3DE6A0; --s3:#FFD84D; --s4:#FF6A3D;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --measure:38rem;
+}
+*{box-sizing:border-box}
+html{background:var(--ink);color:var(--paper);-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--serif);font-size:1.15rem;line-height:1.6;font-optical-sizing:auto;background:var(--ink)}
+a{color:var(--paper);text-decoration-color:var(--slate);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{text-decoration-color:var(--s1)}
+:focus-visible{outline:2px solid var(--s1);outline-offset:3px;border-radius:2px}
+.wrap{max-width:72rem;margin:0 auto;padding:0 1.25rem}
+.prose{max-width:var(--measure)}
+p{margin:0 0 1em}
+
+/* hero */
+.hero{padding-block:2.5rem 1rem}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;font-size:1rem;color:var(--slate);margin-bottom:2rem;flex-wrap:wrap}
+.top b{color:var(--paper);font-weight:600;letter-spacing:.01em}
+.top nav{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem}
+.top nav a{color:var(--slate);text-decoration:none}
+.top nav a:hover{color:var(--paper)}
+h1{font-weight:300;font-size:clamp(2.3rem,5.4vw,4.4rem);line-height:1.04;letter-spacing:-.02em;margin:0 0 1.75rem;max-width:21ch;text-wrap:balance}
+h1 .n{font-weight:600;font-variant-numeric:lining-nums tabular-nums;
+  background:linear-gradient(90deg,var(--s0),var(--s1) 30%,var(--s2) 52%,var(--s3) 75%,var(--s4));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.stage{position:relative;border-radius:6px;background:var(--ink-2);padding:clamp(.5rem,1.6vw,1.25rem)}
+canvas{display:block;width:100%;height:auto;image-rendering:auto}
+.readout{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem 1.5rem;margin-top:.9rem;font-size:1rem;color:var(--slate)}
+.readout output{font-family:var(--mono);font-size:.95rem;color:var(--paper)}
+.readout button{font:inherit;color:var(--slate);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:.18em}
+.readout button:hover{color:var(--paper)}
+.legend{font-size:.95rem;color:var(--slate);margin:.4rem 0 0}
+
+/* sections */
+section{padding-block:4.5rem 0}
+h2{font-weight:400;font-size:clamp(1.7rem,3vw,2.3rem);line-height:1.15;letter-spacing:-.01em;margin:0 0 1rem}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3rem;align-items:start}
+@media (max-width:860px){.cols{grid-template-columns:1fr;gap:1.5rem}}
+
+/* timeline */
+.tl{list-style:none;margin:.5rem 0 0;padding:0}
+.tl li{display:grid;grid-template-columns:4.2rem 1fr;gap:.9rem;align-items:center;padding:.38rem 0;font-size:1rem}
+.tl .len{font-family:var(--mono);font-size:.98rem;text-align:right;color:var(--paper)}
+.tl .bar{position:relative;height:1.55rem;display:flex;align-items:center}
+.tl .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ink-3)}
+.tl .bar span{position:relative;padding-left:.6rem;color:var(--slate);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl li.me .bar i{background:linear-gradient(90deg,var(--s0),var(--s1),var(--s2),var(--s3),var(--s4))}
+.tl li.me .bar span{color:var(--ink);font-weight:600}
+.tl li.me.prev .bar i{background:linear-gradient(90deg,var(--s0),var(--s1),var(--s2));opacity:.75}
+.scale{font-size:.9rem;color:var(--slate);margin-top:.5rem}
+
+/* sequence */
+.seq{font-family:var(--mono);font-size:.78rem;line-height:1.5;word-break:break-all;margin:1.25rem 0 0;padding:1.1rem;border-radius:6px;background:var(--ink-2);max-height:22rem;overflow:auto}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
+.btn{font-family:var(--serif);font-size:1rem;color:var(--paper);background:var(--ink-3);border:1px solid var(--faint);border-radius:4px;padding:.5rem .95rem;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{border-color:var(--slate)}
+.btn.primary{background:var(--paper);color:var(--ink);border-color:var(--paper);font-weight:600}
+.btn.primary:hover{background:#fff}
+
+/* verifier */
+textarea{width:100%;min-height:9rem;resize:vertical;font-family:var(--mono);font-size:.85rem;line-height:1.5;color:var(--paper);background:var(--ink-2);border:1px solid var(--faint);border-radius:6px;padding:.9rem}
+textarea:focus{border-color:var(--s1);outline:none}
+label{display:block;font-size:1rem;color:var(--slate);margin-bottom:.5rem}
+.result{font-family:var(--mono);font-size:.92rem;margin-top:1rem;padding:1rem;border-radius:6px;background:var(--ink-2);border-left:3px solid var(--faint);white-space:pre-wrap;min-height:3.2rem}
+.result.ok{border-left-color:var(--s2)}
+.result.bad{border-left-color:var(--s4)}
+
+/* cite + footer */
+blockquote{margin:1rem 0 0;padding:1rem 1.2rem;border-left:3px solid var(--faint);background:var(--ink-2);border-radius:0 6px 6px 0;font-size:1.05rem}
+footer{padding-block:5rem 3rem;color:var(--slate);font-size:.95rem}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="hero wrap">
+  <div class="top">
+    <b>SnakeBox</b>
+    <nav aria-label="Sections">
+      <a href="#what">What it is</a><a href="#record">Record</a><a href="#sequence">Sequence</a><a href="#verify">Verify</a>
+    </nav>
+  </div>
+  <h1>A snake <span class="n">2946</span> edges long, in thirteen dimensions.</h1>
+  <div class="stage">
+    <canvas id="cube" width="1280" height="640" aria-label="The 2946-edge snake drawn on a 128 by 64 grid of all 8192 vertices of the 13-dimensional hypercube"></canvas>
+  </div>
+  <div class="readout">
+    <span>Edges drawn <output id="count">0</output> of 2946</span>
+    <span id="hover">Hover over the grid to inspect a vertex.</span>
+    <button id="replay" type="button">Replay</button>
+  </div>
+  <p class="legend">Each cell is one of the 8192 corners of the 13-dimensional cube, arranged so that side-by-side cells differ in a single coordinate. Colour shows how far along the snake a vertex is, from violet at the start to orange at the end.</p>
+</header>
+
+<main class="wrap">
+  <section id="what" class="cols">
+    <div class="prose">
+      <h2>What is a snake in the box?</h2>
+      <p>Take an <i>n</i>-dimensional cube and walk along its edges from corner to corner. The rule: you may never step next to a corner you have already visited, except the one you just came from. The longest such walk is called a snake.</p>
+      <p>The question goes back to W. H. Kautz in 1958, who needed it for error-detecting codes. The answer is known exactly only up to eight dimensions. Above that, every number is a record waiting to be beaten.</p>
+    </div>
+    <div class="prose">
+      <h2>How this one was found</h2>
+      <p>The previous record, Tom Taylor's 2938, is built recursively from snakes in lower dimensions, so it splits into pieces that each fill a 9- or 10-dimensional subcube. Holding the rest of the snake fixed, I cleared one piece at a time and rebuilt it with a GPU simulated-annealing search, keeping it whenever it came back longer. Three rebuilds took it from 2938 to 2944.</p>
+      <p>An exact constraint-programming search over a 50 to 60 edge window of one of those snakes then found a reroute two edges longer: 2946.</p>
+    </div>
+  </section>
+
+  <section id="record">
+    <h2>The record in thirteen dimensions</h2>
+    <ol class="tl" id="tl"></ol>
+    <p class="scale">Bars are drawn to scale from 2650 edges.</p>
+  </section>
+
+  <section id="sequence">
+    <h2>The snake itself</h2>
+    <div class="prose">
+      <p>Start at the corner 0000000000000. Each character below names the coordinate to flip next, counting from 0, with <code>a</code>, <code>b</code> and <code>c</code> standing for 10, 11 and 12.</p>
+    </div>
+    <div class="seq" id="seq" tabindex="0" aria-label="The 2946-character transition sequence"></div>
+    <div class="actions">
+      <button class="btn primary" id="copy" type="button">Copy sequence</button>
+      <a class="btn" href="q13_2946.txt" download>Download q13_2946.txt</a>
+      <a class="btn" href="https://www.minortriad.com/snake/">Check it on the records page</a>
+    </div>
+  </section>
+
+  <section id="verify" class="cols">
+    <div class="prose">
+      <h2>Verify any snake</h2>
+      <p>Paste a transition sequence and this page checks it in your browser: every corner distinct, and no two corners adjacent unless they are consecutive on the path. Nothing is sent anywhere.</p>
+      <p>Prefer the command line? <a href="verify.py">verify.py</a> does the same with only the Python standard library.</p>
+    </div>
+    <div>
+      <label for="input">Transition sequence</label>
+      <textarea id="input" spellcheck="false" autocomplete="off"></textarea>
+      <div class="actions">
+        <button class="btn primary" id="check" type="button">Check snake</button>
+        <button class="btn" id="clear" type="button">Clear</button>
+      </div>
+      <div class="result" id="result" role="status" aria-live="polite">The 2946 is loaded. Press Check snake.</div>
+    </div>
+  </section>
+
+  <section id="cite">
+    <div class="prose">
+      <h2>Citing</h2>
+      <blockquote>W. Toner, <i>A snake of length 2946 in the 13-dimensional hypercube</i>, Zenodo (2026). doi:<a href="https://doi.org/10.5281/zenodo.23299075">10.5281/zenodo.23299075</a></blockquote>
+      <p style="margin-top:1rem">The earlier 2944 is archived at doi:<a href="https://doi.org/10.5281/zenodo.23297780">10.5281/zenodo.23297780</a>. The full table of records in every dimension is kept by Tom Ace at <a href="https://www.minortriad.com/snake/">minortriad.com/snake</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  William Toner, October 2026. Source on <a href="https://github.com/williamtoner/SnakeBox">GitHub</a>, MIT licence.
+</footer>
+
+<script>
+const SEQ="143056031634063174654163140316341531634062036134013670634031603451071403416340314734031602630418431630260431640741631403163415316340314713604361306725034163403147165730436147134031603405945603163406317465416314031634153163406203613401367063403160345107140341634031473403160263043185134036103451402604154316340631605407503451436145134015413672631570431634051403416340317a1620613043741304361430417015430613043607631043163026043613514361304136145647136043613065034163184316302604316402561304361306740342134036203405140341634031471627631403163415407603163406316791706340316034067403163026043614064713652043613481361506701340362563043614304152704361306704514361304136147613620361481340365061306527034163403147627163140316341785430613043605631570b1361754305603163406317465416314031630520361304136706340316034510714034163403147340316026304184316305631603406740347160561741304361430415043026304164076031634063160516340316741631403163096314713615674031634037063403160351302630431841630263167416314031634154076031634063160516318713615216340316376031634063165716314031634178543061304360563157403421340362034051403416340314a94130436143041504302630431243047513650634031603458714361304136175613604305630431841630263167416314031634154076031634063160516318431634063174130436143072560471361406136203613047604306130436071976136043613067045143613041367250634065036134713614304150430263043124304760430526130431841634061560430613043607304361345140610345216340316376031634063165016340367c630436143041504361340751362763145104315416341543057045061360436134514062041543016304315813403620613043741304361430417015430613043607631043163026043613514361304136145647136043613065495043061304317416340375617413043614305276031634063174130436135143613041361470461340620361348136143056031634063174654163140316341531634062036134013670634031603451071403416340314734031602619a1620613043741304361430417015430613043607631043163026043613514361304136145647136043613065034163184316302604316402561304361306740342134036203405140341634031471627631403163415407603163406316791706340316034067403163026316041631740652703416340314713604361348136150613604361306704514361304136147613620361481340365034063165716314031634178543061304360563157403421340362034051403416340314ba413043614304150430263043124304751365063403160345871436130413617561360430563043184163026316741631403163415407603163406316051631843163406317413043614307256047136140613620361304760430613043607197613604361306704514361304136725063403160340674034213403620340514034163403147851360436130650341631843163026316046843045604306130436076154167034071403416315431630263165416314031634150a54034163154316026304315430413615761360436130670451407631604163184316340631741304361430725603163406316581506340316034514361304874034713403673041531634031627613043613071043613491361430760316340631741620340514361304361785061360436130653613041843163056316034067403471605276314031634174306130431843041604307630436143045640316307631603461360720634031603451436130";
+const STOPS=[[106,76,255],[0,184,240],[61,230,160],[255,216,77],[255,106,61]];
+function grad(t){t=Math.min(1,Math.max(0,t))*(STOPS.length-1);const i=Math.min(STOPS.length-2,Math.floor(t)),f=t-i,a=STOPS[i],b=STOPS[i+1];
+  return `rgb(${a.map((v,k)=>Math.round(v+(b[k]-v)*f)).join(",")})`}
+function ginv(g){let b=0;while(g){b^=g;g>>=1}return b}
+
+// path + layout
+const path=[0];{let v=0;for(const c of SEQ){v^=1<<parseInt(c,36);path.push(v)}}
+const W=128,H=64;
+const pos=path.map(v=>[ginv(v&127),ginv(v>>7)]);
+const order=new Map(path.map((v,i)=>[v,i]));
+
+// canvas
+const cv=document.getElementById("cube"),ctx=cv.getContext("2d");
+let DPR=1,cell=10;
+function size(){const r=cv.getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);
+  cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.width*DPR/2);cell=cv.width/W}
+function cx(x){return (x+.5)*cell}function cy(y){return cv.height-(y+.5)*cell}
+function base(){ctx.fillStyle="#1D2038";ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.fillStyle="#2E3254";const d=Math.max(1,cell*.16);
+  for(let x=0;x<W;x++)for(let y=0;y<H;y++)ctx.fillRect(cx(x)-d/2,cy(y)-d/2,d,d)}
+function drawStep(i){const t=i/(path.length-1),[x,y]=pos[i];ctx.fillStyle=grad(t);
+  const s=cell*.56;ctx.fillRect(cx(x)-s/2,cy(y)-s/2,s,s);
+  if(i>0){const [px,py]=pos[i-1];if(Math.abs(px-x)+Math.abs(py-y)===1){
+    ctx.strokeStyle=grad(t);ctx.lineWidth=cell*.3;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(cx(px),cy(py));ctx.lineTo(cx(x),cy(y));ctx.stroke()}}}
+function ends(){for(const [i,fill] of [[0,true],[path.length-1,false]]){const [x,y]=pos[i];ctx.beginPath();ctx.arc(cx(x),cy(y),cell*.7,0,7);
+  ctx.lineWidth=Math.max(1.5,cell*.18);ctx.strokeStyle="#ECEAF4";if(fill){ctx.fillStyle="#ECEAF4";ctx.fill()}else ctx.stroke()}}
+const out=document.getElementById("count");
+let raf=0,drawn=0;
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function full(){base();for(let i=0;i<path.length;i++)drawStep(i);ends();drawn=path.length;out.textContent=path.length-1}
+function animate(){cancelAnimationFrame(raf);size();base();drawn=0;out.textContent=0;
+  if(reduce){full();return}
+  const t0=performance.now(),dur=4200;
+  (function frame(now){const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,2.2),target=Math.round(e*(path.length-1))+1;
+    while(drawn<target){drawStep(drawn);drawn++}out.textContent=drawn-1;
+    if(k<1)raf=requestAnimationFrame(frame);else ends()})(t0)}
+document.getElementById("replay").onclick=animate;
+let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{if(drawn>=path.length){size();full()}else animate()},150)});
+
+// hover
+const hov=document.getElementById("hover");
+cv.addEventListener("mousemove",e=>{const r=cv.getBoundingClientRect();
+  const gx=Math.floor((e.clientX-r.left)/r.width*W),gy=H-1-Math.floor((e.clientY-r.top)/r.height*H);
+  if(gx<0||gx>=W||gy<0||gy>=H)return;
+  const v=((gy^(gy>>1))<<7)|(gx^(gx>>1));const bits=v.toString(2).padStart(13,"0");
+  const i=order.get(v);hov.textContent=i===undefined?`${bits}: not on the snake`:`${bits}: vertex ${i} of the snake`});
+cv.addEventListener("mouseleave",()=>hov.textContent="Hover over the grid to inspect a vertex.");
+
+// timeline
+const REC=[[2687,"Allison & Paulusma, 2016"],[2854,"Ace, 2025"],[2892,"Ace, June 2026"],[2900,"Echols, July 2026"],[2924,"Orland et al., July 2026"],[2932,"Echols, July 2026"],[2934,"Itty, August 2026"],[2938,"Taylor, September 2026"],[2944,"Toner, 11 October 2026","prev"],[2946,"Toner, 11 October 2026","now"]];
+const tl=document.getElementById("tl"),MIN=2650,MAX=2946;
+tl.innerHTML=REC.map(([n,who,me])=>`<li class="${me?"me "+(me==="prev"?"prev":""):""}"><span class="len">${n}</span><span class="bar"><i style="width:${(8+92*(n-MIN)/(MAX-MIN)).toFixed(1)}%"></i><span>${who}</span></span></li>`).join("");
+
+// sequence block, coloured by position
+const sq=document.getElementById("seq");const frag=document.createDocumentFragment();
+const CH=64;for(let i=0;i<SEQ.length;i+=CH){const s=document.createElement("span");s.style.color=grad(i/SEQ.length);s.textContent=SEQ.slice(i,i+CH);frag.appendChild(s)}
+sq.appendChild(frag);
+document.getElementById("copy").onclick=async e=>{try{await navigator.clipboard.writeText(SEQ);e.target.textContent="Copied"}catch{e.target.textContent="Select the text to copy"}setTimeout(()=>e.target.textContent="Copy sequence",1800)};
+
+// verifier
+const inp=document.getElementById("input"),res=document.getElementById("result");inp.value=SEQ;
+function check(raw){const s=raw.replace(/[\s,]+/g,"").toLowerCase();
+  if(!s)return[false,"Paste a transition sequence first."];
+  const bad=s.match(/[^0-9a-z]/);if(bad)return[false,`Character "${bad[0]}" at position ${s.indexOf(bad[0])+1} is not a coordinate. Use 0-9 then a-z.`];
+  const d=s.split("").map(c=>parseInt(c,36)),n=Math.max(...d)+1;if(n>30)return[false,"Dimensions above 30 aren't supported here."];
+  let v=0;const seen=new Map([[0,0]]);
+  for(let i=0;i<d.length;i++){v^=1<<d[i];if(seen.has(v))return[false,`Not a snake: step ${i+1} returns to a vertex already visited at step ${seen.get(v)}.`];seen.set(v,i+1)}
+  let k=0;for(const [u,i] of seen)for(let b=0;b<n;b++){const j=seen.get(u^(1<<b));if(j!==undefined&&Math.abs(i-j)!==1)return[false,`Not a snake: vertices ${Math.min(i,j)} and ${Math.max(i,j)} are adjacent but not consecutive.`]}
+  return[true,`Valid snake.\ndimension   ${n}\nvertices    ${d.length+1}, all distinct\nchords      0\nlength      ${d.length} edges`]}
+document.getElementById("check").onclick=()=>{const [ok,msg]=check(inp.value);res.textContent=msg;res.className="result "+(ok?"ok":"bad")};
+document.getElementById("clear").onclick=()=>{inp.value="";res.textContent="Paste a sequence, then press Check snake.";res.className="result";inp.focus()};
+
+// start when the fonts settle
+(document.fonts?document.fonts.ready:Promise.resolve()).then(animate);
+</script>
+</body>
+</html>
