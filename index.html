@@ -94,7 +94,7 @@ footer{padding-block:5rem 3rem;color:var(--slate);font-size:.95rem}
   <div class="top">
     <b>SnakeBox</b>
     <nav aria-label="Sections">
-      <a href="#what">What it is</a><a href="#record">Record</a><a href="#sequence">Sequence</a><a href="#verify">Verify</a>
+      <a href="#what">What it is</a><a href="#record">Record</a><a href="#q14">Q14</a><a href="#sequence">Sequence</a><a href="#verify">Verify</a>
     </nav>
   </div>
   <h1>A snake <span class="n">2946</span> edges long, in thirteen dimensions.</h1>
@@ -127,6 +127,19 @@ footer{padding-block:5rem 3rem;color:var(--slate);font-size:.95rem}
     <h2>The record in thirteen dimensions</h2>
     <ol class="tl" id="tl"></ol>
     <p class="scale">Bars are drawn to scale from 2650 edges.</p>
+  </section>
+
+  <section id="q14">
+    <h2>And in fourteen dimensions: 5850</h2>
+    <div class="prose">
+      <p>The same method works one dimension up. Taylor's 5844 in the 14-dimensional cube splits into 32 pieces, each inside a 9-dimensional subcube. On 12 October 2026 three of them rebuilt two edges longer, taking it from 5844 to 5846, 5848 and then 5850. The records page stops at thirteen dimensions, so 5844 was the best published length.</p>
+    </div>
+    <ol class="tl" id="tl14"></ol>
+    <p class="scale">Bars are drawn to scale from 5800 edges.</p>
+    <div class="actions">
+      <button class="btn primary" id="load14" type="button">Check it in the verifier</button>
+      <a class="btn" href="q14_5850.txt" download>Download q14_5850.txt</a>
+    </div>
   </section>
 
   <section id="sequence">
@@ -227,6 +240,10 @@ const REC=[[2687,"Allison & Paulusma, 2016"],[2854,"Ace, 2025"],[2892,"Ace, June
 const tl=document.getElementById("tl"),MIN=2650,MAX=2946;
 tl.innerHTML=REC.map(([n,who,me])=>`<li class="${me?"me "+(me==="prev"?"prev":""):""}"><span class="len">${n}</span><span class="bar"><i style="width:${(8+92*(n-MIN)/(MAX-MIN)).toFixed(1)}%"></i><span>${who}</span></span></li>`).join("");
 
+// fourteen dimensions
+const REC14=[[5844,"Taylor, September 2026"],[5846,"Toner, 12 October 2026","prev"],[5848,"Toner, 12 October 2026","prev"],[5850,"Toner, 12 October 2026","now"]];
+document.getElementById("tl14").innerHTML=REC14.map(([n,who,me])=>`<li class="${me?"me "+(me==="prev"?"prev":""):""}"><span class="len">${n}</span><span class="bar"><i style="width:${(8+92*(n-5800)/(5850-5800)).toFixed(1)}%"></i><span>${who}</span></span></li>`).join("");
+
 // sequence block, coloured by position
 const sq=document.getElementById("seq");const frag=document.createDocumentFragment();
 const CH=64;for(let i=0;i<SEQ.length;i+=CH){const s=document.createElement("span");s.style.color=grad(i/SEQ.length);s.textContent=SEQ.slice(i,i+CH);frag.appendChild(s)}
@@ -244,6 +261,10 @@ function check(raw){const s=raw.replace(/[\s,]+/g,"").toLowerCase();
   let k=0;for(const [u,i] of seen)for(let b=0;b<n;b++){const j=seen.get(u^(1<<b));if(j!==undefined&&Math.abs(i-j)!==1)return[false,`Not a snake: vertices ${Math.min(i,j)} and ${Math.max(i,j)} are adjacent but not consecutive.`]}
   return[true,`Valid snake.\ndimension   ${n}\nvertices    ${d.length+1}, all distinct\nchords      0\nlength      ${d.length} edges`]}
 document.getElementById("check").onclick=()=>{const [ok,msg]=check(inp.value);res.textContent=msg;res.className="result "+(ok?"ok":"bad")};
+document.getElementById("load14").onclick=async()=>{
+  try{const r=await fetch("q14_5850.txt");if(!r.ok)throw 0;inp.value=(await r.text()).trim();res.textContent="The 5850 is loaded. Press Check snake.";}
+  catch{res.textContent="Could not load q14_5850.txt here. Download it and paste its contents.";}
+  res.className="result";document.getElementById("verify").scrollIntoView({behavior:reduce?"auto":"smooth"})};
 document.getElementById("clear").onclick=()=>{inp.value="";res.textContent="Paste a sequence, then press Check snake.";res.className="result";inp.focus()};
 
 // start when the fonts settle
